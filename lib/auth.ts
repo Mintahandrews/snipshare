@@ -24,12 +24,18 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+      authorization: {
+        params: {
+          scope: 'repo,user:email',
+        },
+      },
       profile(profile) {
         return {
           id: profile.id.toString(),
           name: profile.name || profile.login,
-          email: profile.email,
+          email: profile.email || `${profile.id}+${profile.login}@users.noreply.github.com`,
           image: profile.avatar_url,
+          username: profile.login,
         };
       },
     }),

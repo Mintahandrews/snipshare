@@ -14,7 +14,79 @@ This project is built with [Next.js](https://nextjs.org/) and was bootstrapped w
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.0.0 or later
+- npm or yarn
+- PostgreSQL database
+- GitHub account (for OAuth)
+
+### Local Development Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/snipshare.git
+   cd snipshare
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
+
+3. Set up your environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   Then edit the `.env` file with your configuration.
+
+4. Set up the database:
+   ```bash
+   npx prisma migrate dev --name init
+   ```
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+## GitHub App Setup
+
+To enable GitHub integration, you'll need to create a GitHub OAuth App:
+
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
+2. Click "New OAuth App"
+3. Fill in the following details:
+   - **Application name**: SnipShare
+   - **Homepage URL**: `http://localhost:3000` (for development) or your production URL
+   - **Authorization callback URL**: `http://localhost:3000/api/auth/callback/github` (for development) or your production URL
+
+4. After registering the app, you'll get a Client ID. Generate a new client secret.
+5. Update your `.env` file with these values:
+   ```
+   GITHUB_ID=your_client_id_here
+   GITHUB_SECRET=your_client_secret_here
+   ```
+
+### Setting up Webhooks (Optional)
+
+For additional GitHub integration features:
+
+1. In your GitHub OAuth App settings, go to "Webhooks"
+2. Set the following:
+   - **Payload URL**: `http://localhost:3000/api/webhooks/github` (update with your domain in production)
+   - **Content type**: `application/json`
+   - **Secret**: Generate a strong secret and set it as `GITHUB_WEBHOOK_SECRET` in your `.env`
+
+3. Select the events you want to listen to (at minimum, select "Push" and "Pull Request")
+
+## Development
+
+To start the development server:
 
 ```bash
 npm run dev
