@@ -1,0 +1,6 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": ["neondb", "pooler", "sslmode", "zygv", "nextauth"],
+  "ignorePaths": ["node_modules/**", "dist/**", ".git/**"]
+}
