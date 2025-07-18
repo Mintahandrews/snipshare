@@ -16,23 +16,28 @@ const adapter = PrismaAdapter(prisma);
 const originalCreateUser = adapter.createUser!;
 adapter.createUser = async (data: Parameters<typeof originalCreateUser>[0] & { username?: string }) => {
   const { username, ...userData } = data;
-  const user = await originalCreateUser(userData);
   
-  // If username is provided, update the user with the username
+  // Create user with username if provided
   if (username) {
     try {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { username }
+      // First create the user
+      const createdUser = await prisma.user.create({
+        data: {
+          ...userData,
+          username: username,
+          email: userData.email || `${Date.now()}-user@example.com` // Ensure email is provided
+        }
       });
-      return { ...user, username };
+      return createdUser;
     } catch (error) {
-      console.error('Failed to update user with username:', error);
-      // Continue without username if update fails
+      console.error('Failed to create user with username:', error);
+      // Fall back to default createUser if there's an error
+      return originalCreateUser(data);
     }
   }
   
-  return user;
+  // If no username, use default createUser
+  return originalCreateUser(data);
 };
 
 export const authOptions: NextAuthOptions = {
@@ -82,6 +87,15 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub as string;
         try {
           // Fetch additional user data from database
+          // Define a type that includes the username field
+          type UserWithUsername = {
+            id: string;
+            name: string | null;
+            email: string | null;
+            image: string | null;
+            username: string | null;
+          };
+
           const dbUser = await prisma.user.findUnique({
             where: { id: session.user.id },
             select: { 
@@ -91,7 +105,7 @@ export const authOptions: NextAuthOptions = {
               image: true, 
               username: true 
             }
-          });
+          }) as UserWithUsername | null;
           
           if (dbUser) {
             // Create a new user object with all the necessary properties
@@ -99,10 +113,10 @@ export const authOptions: NextAuthOptions = {
               ...session.user,
               ...dbUser,
               // Ensure we have a fallback for username
-              username: (dbUser as any).username || session.user.email?.split('@')[0] 
+              username: dbUser.username || session.user.email?.split('@')[0] || null
             };
             
-            // Type assertion to bypass TypeScript errors
+            // Update the session with the user data
             session.user = userWithUsername as any;
           }
         } catch (error) {
