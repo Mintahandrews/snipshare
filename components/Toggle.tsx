@@ -2,12 +2,20 @@ import { Switch } from "@headlessui/react";
 import clsx from "clsx";
 import { memo } from "react";
 
-interface ToggleProps {
+interface ToggleProps extends React.HTMLAttributes<HTMLButtonElement> {
   initialValue: boolean;
   setValue: (_: boolean) => void;
+  id?: string;
+  'aria-label'?: string;
 }
 
-export default memo(function Toggle({ initialValue, setValue }: ToggleProps) {
+export default memo(function Toggle({ 
+  initialValue, 
+  setValue, 
+  id, 
+  'aria-label': ariaLabel, 
+  ...props 
+}: ToggleProps) {
   return (
     <div className="flex h-[34px] items-center">
       <Switch
@@ -19,6 +27,8 @@ export default memo(function Toggle({ initialValue, setValue }: ToggleProps) {
           "focus:outline-none",
           "ui-checked:bg-blue-600 ui-not-checked:bg-gray-200"
         )}
+        id={id}
+        aria-label={ariaLabel}
       >
         <span
           className={clsx(

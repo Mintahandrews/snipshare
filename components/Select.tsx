@@ -10,11 +10,13 @@ import type { LanguageName } from "@uiw/codemirror-extensions-langs";
 import clsx from "clsx";
 import { Fragment, memo } from "react";
 
-interface SelectProps<T> {
+interface SelectProps<T> extends React.HTMLAttributes<HTMLDivElement> {
   type: "language" | "theme" | "font";
   initialValue: T;
   setValue: (_: T) => void;
   options: T[];
+  id?: string;
+  'aria-label'?: string;
 }
 
 function ThemeBubble({ color }: { color: string }) {

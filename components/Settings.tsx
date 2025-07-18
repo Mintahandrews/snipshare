@@ -145,9 +145,10 @@ export default function Settings() {
         <DragHandleDots2Icon className="rotate-90" />
       </motion.div>
       <div className={clsx("flex flex-wrap justify-center gap-3 xs:gap-4 sm:gap-6 md:gap-8", "")}>
-        <div>
-          <label htmlFor="language">Language</label>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="language-select" className="text-sm font-medium">Language</label>
           <Select
+            id="language-select"
             type="language"
             initialValue={language}
             setValue={
@@ -156,11 +157,13 @@ export default function Settings() {
               ) => void
             }
             options={SUPPORTED_LANGUAGES}
+            aria-label="Select programming language"
           />
         </div>
-        <div>
-          <label htmlFor="theme">Theme</label>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="theme-select" className="text-sm font-medium">Theme</label>
           <Select
+            id="theme-select"
             type="theme"
             initialValue={theme}
             setValue={
@@ -169,11 +172,13 @@ export default function Settings() {
               ) => void
             }
             options={SUPPORTED_THEMES}
+            aria-label="Select color theme"
           />
         </div>
-        <div>
-          <label htmlFor="font">Font</label>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="font-select" className="text-sm font-medium">Font</label>
           <Select
+            id="font-select"
             type="font"
             initialValue={fontStyle}
             setValue={
@@ -182,18 +187,28 @@ export default function Settings() {
               ) => void
             }
             options={SUPPORTED_FONT_STYLES}
+            aria-label="Select font style"
           />
         </div>
-        <div>
-          <label htmlFor="lineNumbers">Line Numbers</label>
-          <Toggle initialValue={lineNumbers} setValue={setLineNumbers} />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <Toggle 
+              id="line-numbers-toggle"
+              initialValue={lineNumbers} 
+              setValue={setLineNumbers} 
+              aria-label="Toggle line numbers"
+            />
+            <label htmlFor="line-numbers-toggle" className="text-sm font-medium">Line Numbers</label>
+          </div>
         </div>
-        <div>
-          <label htmlFor="padding">Padding</label>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="padding-choices" className="text-sm font-medium">Padding</label>
           <Choices
+            id="padding-choices"
             initialValue={padding}
             setValue={setPadding}
             choices={SUPPORTED_PADDING_CHOICES}
+            aria-label="Select padding size"
           />
         </div>
       </div>

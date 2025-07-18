@@ -6,17 +6,32 @@ import { memo } from "react";
 interface ChoicesProps {
   choices: ChoiceDefinition[];
   initialValue: ChoiceDefinition;
-  setValue: (_: ChoiceDefinition) => void;
+  setValue: (value: ChoiceDefinition) => void;
+  id?: string;
+  'aria-label'?: string;
+  className?: string;
 }
 
 export default memo(function Choices({
   choices,
   initialValue,
   setValue,
+  id,
+  'aria-label': ariaLabel,
+  className,
+  ...props
 }: ChoicesProps) {
   return (
-    <RadioGroup value={initialValue} onChange={setValue}>
-      <div className="flex gap-3 py-[7px] text-sm">
+    <RadioGroup<"div", ChoiceDefinition>
+      as="div"
+      value={initialValue}
+      onChange={setValue}
+      id={id}
+      aria-label={ariaLabel}
+      className={className}
+      {...props}
+    >
+      <div className="flex gap-3 py-[7px] text-sm" role="radiogroup">
         {choices.map((choice) => (
           <RadioGroup.Option
             key={choice.label}
@@ -26,7 +41,9 @@ export default memo(function Choices({
             <span
               className={clsx(
                 "rounded-md py-1 px-2",
-                "transition-colors duration-100 ease-in-out"
+                "transition-colors duration-100 ease-in-out",
+                "ui-checked:bg-blue-100 ui-checked:text-blue-800 dark:ui-checked:bg-blue-900/30 dark:ui-checked:text-blue-200",
+                "ui-not-checked:bg-transparent ui-not-checked:text-gray-700 dark:ui-not-checked:text-gray-300"
               )}
             >
               {choice.label}
