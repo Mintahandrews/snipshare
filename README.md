@@ -72,18 +72,6 @@ To enable GitHub integration, you'll need to create a GitHub OAuth App:
    GITHUB_SECRET=your_client_secret_here
    ```
 
-### Setting up Webhooks (Optional)
-
-For additional GitHub integration features:
-
-1. In your GitHub OAuth App settings, go to "Webhooks"
-2. Set the following:
-   - **Payload URL**: `http://localhost:3000/api/webhooks/github` (update with your domain in production)
-   - **Content type**: `application/json`
-   - **Secret**: Generate a strong secret and set it as `GITHUB_WEBHOOK_SECRET` in your `.env`
-
-3. Select the events you want to listen to (at minimum, select "Push" and "Pull Request")
-
 ## Development
 
 To start the development server:
